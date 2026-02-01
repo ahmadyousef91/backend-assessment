@@ -5,7 +5,7 @@ spring:
   datasource:
     url: jdbc:h2:mem:demo;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     driver-class-name: org.h2.Driver
-    username: ay
+    username: sa
     password:
 
   jpa:
@@ -20,3 +20,8 @@ spring:
     baseline-on-migrate: true
     locations: classpath:db/migration
     baseline-version: 0
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
