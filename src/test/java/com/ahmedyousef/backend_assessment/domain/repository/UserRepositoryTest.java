@@ -23,6 +23,7 @@ class UserRepositoryTest {
         User saved = userRepository.save(
                 User.builder()
                         .username("ahmed")
+                        .passwordHash("$2a$12$R9h/cIPz0gi.URNNX3kh2OPST9/PgBkqquzi.Ss7KIUgO2t0jWMUW")
                         .role(role)
                         .build()
         );
@@ -39,7 +40,9 @@ class UserRepositoryTest {
     void existsByUsername_shouldReturnTrueWhenExists() {
         UserRole role = UserRole.values()[0];
 
-        userRepository.save(User.builder().username("user1").role(role).build());
+        userRepository.save(User.builder().username("user1")
+                .passwordHash("$2a$12$R9h/cIPz0gi.URNNX3kh2OPST9/PgBkqquzi.Ss7KIUgO2t0jWMUW")
+                .role(role).build());
 
         assertThat(userRepository.existsByUsername("user1")).isTrue();
         assertThat(userRepository.existsByUsername("missing")).isFalse();
@@ -49,8 +52,13 @@ class UserRepositoryTest {
     void findByRole_shouldReturnUsersWithSameRole() {
         UserRole role = UserRole.values()[0];
 
-        userRepository.save(User.builder().username("u1").role(role).build());
-        userRepository.save(User.builder().username("u2").role(role).build());
+        userRepository.save(User.builder()
+                .username("u1")
+                .passwordHash("$2a$12$R9h/cIPz0gi.URNNX3kh2OPST9/PgBkqquzi.Ss7KIUgO2t0jWMUW")
+                .role(role).build());
+        userRepository.save(User.builder().username("u2")
+                .passwordHash("$2a$12$R9h/cIPz0gi.URNNX3kh2OPST9/PgBkqquzi.Ss7KIUgO2t0jWMUW")
+                .role(role).build());
 
         assertThat(userRepository.findByRole(role))
                 .extracting(User::getUsername)

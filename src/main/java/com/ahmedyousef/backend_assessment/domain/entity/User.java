@@ -1,6 +1,7 @@
 package com.ahmedyousef.backend_assessment.domain.entity;
 
 import com.ahmedyousef.backend_assessment.domain.enums.UserRole;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,6 +24,9 @@ public class User {
 
     @Column(name = "username", unique = true, nullable = false, length = 255)
     private String username;
+
+    @Column(name = "password_hash", nullable = false)
+    private String passwordHash;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false, length = 20)

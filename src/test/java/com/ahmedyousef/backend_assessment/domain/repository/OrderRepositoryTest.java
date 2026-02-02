@@ -31,6 +31,7 @@ class OrderRepositoryTest {
     void saveOrder_shouldCascadeSaveItems() {
         User user = userRepository.save(User.builder()
                 .username("buyer1")
+                .passwordHash("$2a$12$R9h/cIPz0gi.URNNX3kh2OPST9/PgBkqquzi.Ss7KIUgO2t0jWMUW")
                 .role(UserRole.values()[0])
                 .build());
 
@@ -70,11 +71,13 @@ class OrderRepositoryTest {
     void findByUserId_shouldReturnOrdersForThatUser() {
         User user1 = userRepository.save(User.builder()
                 .username("buyer2")
+                .passwordHash("$2a$12$R9h/cIPz0gi.URNNX3kh2OPST9/PgBkqquzi.Ss7KIUgO2t0jWMUW")
                 .role(UserRole.values()[0])
                 .build());
 
         User user2 = userRepository.save(User.builder()
                 .username("buyer3")
+                .passwordHash("$2a$12$R9h/cIPz0gi.URNNX3kh2OPST9/PgBkqquzi.Ss7KIUgO2t0jWMUW")
                 .role(UserRole.values()[0])
                 .build());
 
@@ -102,6 +105,7 @@ class OrderRepositoryTest {
     void loadOrder_thenAccessItems_shouldWorkInsideTransaction() {
         User user = userRepository.save(User.builder()
                 .username("buyer4")
+                .passwordHash("$2a$12$R9h/cIPz0gi.URNNX3kh2OPST9/PgBkqquzi.Ss7KIUgO2t0jWMUW")
                 .role(UserRole.values()[0])
                 .build());
 
