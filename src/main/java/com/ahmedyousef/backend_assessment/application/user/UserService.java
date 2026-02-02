@@ -1,6 +1,6 @@
 package com.ahmedyousef.backend_assessment.application.user;
 
-import com.ahmedyousef.backend_assessment.application.dto.RegisterResponse;
+import com.ahmedyousef.backend_assessment.api.dto.RegisterResponse;
 import com.ahmedyousef.backend_assessment.domain.entity.User;
 import com.ahmedyousef.backend_assessment.domain.enums.UserRole;
 import com.ahmedyousef.backend_assessment.domain.repository.UserRepository;
@@ -9,9 +9,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
-public class UserRegistrationService {
+public class UserService {
 
     private final UserRepository userRepo;
     private final PasswordEncoder passwordEncoder;
@@ -33,5 +35,15 @@ public class UserRegistrationService {
         User created = userRepo.save(user);
 
         return new RegisterResponse(created.getId(), created.getUsername(), created.getRole());
+    }
+
+    @Transactional
+    public void manageUser(Long userId, UserRole role) {
+
+        User user = userRepo.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not exists: " + userId));
+
+        user.setRole(role);
+        userRepo.save(user);
     }
 }

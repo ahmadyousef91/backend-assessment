@@ -1,4 +1,4 @@
-package com.ahmedyousef.backend_assessment.application.dto;
+package com.ahmedyousef.backend_assessment.api.dto;
 
 public record TokenResponse(
         String accessToken,

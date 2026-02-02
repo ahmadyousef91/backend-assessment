@@ -1,4 +1,4 @@
-package com.ahmedyousef.backend_assessment.application.dto;
+package com.ahmedyousef.backend_assessment.api.dto;
 
 import jakarta.validation.constraints.NotBlank;
 
