@@ -11,3 +11,18 @@ spring:
 
   flyway:
     enabled: false
+
+security:
+  password-config:
+    algorithm: argon2
+    salt-length: 16       # bytes
+    hash-length: 32       # bytes
+    parallelism: 1        # threads
+    memory-kb: 65536      # KiB (64 MiB)
+    iterations: 3
+  jwt:
+    access-ttl-seconds: 900
+    hmac-secret-base64: "3bdEKdWevTkp/eWTNInJg02cK/QAXSVfuUcojgcxrHQ="
+
+  swagger:
+    enabled: true
