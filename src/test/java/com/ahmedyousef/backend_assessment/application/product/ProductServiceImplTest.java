@@ -1,14 +1,21 @@
 package com.ahmedyousef.backend_assessment.application.product;
 
+import com.ahmedyousef.backend_assessment.api.dto.CachedPage;
 import com.ahmedyousef.backend_assessment.api.dto.ProductRequest;
 import com.ahmedyousef.backend_assessment.api.dto.ProductResponse;
 import com.ahmedyousef.backend_assessment.domain.entity.Product;
 import com.ahmedyousef.backend_assessment.domain.repository.ProductRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
+import org.mockito.ArgumentCaptor;
+import org.mockito.ArgumentMatchers;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -28,6 +35,8 @@ class ProductServiceImplTest {
 
     @Mock
     ProductRepository productRepository;
+    @Mock
+    ProductSearchCacheService searchCacheService;
 
     @InjectMocks
     ProductServiceImpl productService;
@@ -163,31 +172,31 @@ class ProductServiceImplTest {
     }
 
     @Test
-    void search_shouldCallRepositoryAndMapToResponse() {
-        Pageable pageable = PageRequest.of(0, 2, Sort.by("price").descending());
+    void search_shouldCallCacheService_andReturnPage() {
+        Pageable pageable = PageRequest.of(0, 20, Sort.by(Sort.Direction.DESC, "createdAt"));
 
-        Product p1 = Product.builder()
-                .id(1L).name("A").price(new BigDecimal("10.00")).quantity(2).deleted(false)
-                .build();
-        Product p2 = Product.builder()
-                .id(2L).name("B").price(new BigDecimal("20.00")).quantity(0).deleted(false)
-                .build();
+        var cached = new CachedPage<ProductResponse>(
+                List.of(new ProductResponse(1L, "P1", "D", new BigDecimal("10.00"), 5, true, null, null)), // adapt to your DTO
+                0, 20, 1L,
+                "createdAt:DESC"
+        );
 
-        Page<Product> page = new PageImpl<>(List.of(p1, p2), pageable, 2);
+        when(searchCacheService.searchCached(
+                eq("P1"),
+                eq(new BigDecimal("1.00")),
+                eq(new BigDecimal("20.00")),
+                eq(true),
+                eq(pageable)
+        )).thenReturn(cached);
 
-        // IMPORTANT: this requires ProductRepository extends JpaSpecificationExecutor<Product>
-        when(productRepository.findAll(Mockito.<Specification<Product>>any(), eq(pageable)))
-                .thenReturn(page);
+        Page<ProductResponse> result =
+                productService.search("P1", new BigDecimal("1.00"), new BigDecimal("20.00"), true, pageable);
 
-        Page<ProductResponse> res = productService.search("x", null, null, null, pageable);
+        assertEquals(1, result.getTotalElements());
+        assertEquals("P1", result.getContent().get(0).name()); // adapt getter/field
 
-        assertEquals(2, res.getTotalElements());
-        assertEquals(2, res.getContent().size());
-        assertTrue(res.getContent().get(0).available());   // qty 2
-        assertFalse(res.getContent().get(1).available());  // qty 0
-
-        verify(productRepository)
-                .findAll(Mockito.<Specification<Product>>any(), eq(pageable));
+        verify(searchCacheService).searchCached("P1", new BigDecimal("1.00"), new BigDecimal("20.00"), true, pageable);
+        verifyNoInteractions(productRepository); // optional: because caching service owns repository call now
     }
 
 }

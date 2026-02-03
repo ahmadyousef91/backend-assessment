@@ -6,11 +6,24 @@ spring:
     hikari:
       pool-name: auth-hikari
       maximum-pool-size: 10
-      minimum-idle: 0              # containers / bursty traffic
-      idle-timeout: 600000         # 10m (must be < max-lifetime)
-      max-lifetime: 1740000        # 29m
-      connection-timeout: 30000    # 30s
+      minimum-idle: 0
+      idle-timeout: 600000
+      max-lifetime: 1740000
+      connection-timeout: 30000
       auto-commit: false
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+  cache:
+    type: redis
+    redis:
+      time-to-live: 10m
+      cache-null-values: false
+      use-key-prefix: true
+      key-prefix: "backend-assessment::"
 
   jpa:
     hibernate:
@@ -23,11 +36,6 @@ spring:
     baseline-on-migrate: true
     locations: classpath:db/migration
     baseline-version: 0
-
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
 
 security:
   password-config:
@@ -47,6 +55,7 @@ security:
 logging:
   level:
     org.springframework.security: TRACE
+    org.springframework.cache: DEBUG
 
 management:
   endpoints:
