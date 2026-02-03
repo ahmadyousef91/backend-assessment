@@ -4,6 +4,7 @@ import com.ahmedyousef.backend_assessment.api.dto.CachedPage;
 import com.ahmedyousef.backend_assessment.api.dto.ProductRequest;
 import com.ahmedyousef.backend_assessment.api.dto.ProductResponse;
 import com.ahmedyousef.backend_assessment.api.mapper.ProductMapper;
+import com.ahmedyousef.backend_assessment.application.exception.NotFoundException;
 import com.ahmedyousef.backend_assessment.domain.entity.Product;
 import com.ahmedyousef.backend_assessment.domain.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +46,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductResponse update(Long id, ProductRequest req) {
         Product product = productRepository.findByIdAndDeletedFalse(id)
-                .orElseThrow(() -> new IllegalArgumentException("Product not found: " + id));
+                .orElseThrow(() -> new NotFoundException("Product not found: " + id));
 
         product.setName(req.name());
         product.setDescription(req.description());

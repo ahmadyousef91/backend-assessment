@@ -43,8 +43,6 @@ public final class ProductSpecs {
         }
 
         return (root, q, cb) ->
-                available
-                        ? cb.greaterThan(root.get("quantity"), 0)
-                        : cb.lessThanOrEqualTo(root.get("quantity"), 0);
-    }
+                available ? cb.gt(root.get("quantity"), 0) : cb.le(root.get("quantity"), 0);
+    }   
 }
