@@ -37,6 +37,10 @@ public class SecurityConfig {
             "/v3/api-docs.json"
     };
 
+    private static final String[] ACTUATOR_PUBLIC = {
+            "/actuator/**"
+    };
+
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http, JwtDecoder jwtDecoder,
                                             JwtAuthenticationConverter jwtAuthConverter,
@@ -51,6 +55,7 @@ public class SecurityConfig {
                         .requestMatchers("/error").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/login", "/api/auth/register").permitAll()
                         .requestMatchers(SWAGGER_WHITELIST).permitAll()
+                        .requestMatchers(ACTUATOR_PUBLIC).permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth -> oauth
