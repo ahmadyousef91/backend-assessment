@@ -2,10 +2,12 @@ package com.ahmedyousef.backend_assessment.domain.discount.rules;
 
 import com.ahmedyousef.backend_assessment.domain.discount.DiscountContext;
 import com.ahmedyousef.backend_assessment.domain.discount.DiscountRule;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+@Component
 public class Over500Extra5Rule implements DiscountRule {
 
     private static final BigDecimal ELIGIBILITY_AMOUNT = new BigDecimal("500.00");
