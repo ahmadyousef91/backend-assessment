@@ -5,6 +5,8 @@ import com.ahmedyousef.backend_assessment.application.user.UserService;
 import com.ahmedyousef.backend_assessment.domain.enums.UserRole;
 import com.ahmedyousef.backend_assessment.infrastructure.security.auth.AppUserPrincipal;
 import com.ahmedyousef.backend_assessment.infrastructure.security.auth.JwtTokenService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,6 +26,10 @@ public class AuthController {
     private final JwtTokenService tokenService;
     private final UserService registrationService;
 
+    @Operation(
+            summary = "Login",
+            description = "Returns JWT access token."
+    )
     @PostMapping("/login")
     public TokenResponse login(@RequestBody @Valid LoginRequest req) {
         Authentication auth = authManager.authenticate(
@@ -36,6 +42,10 @@ public class AuthController {
         return new TokenResponse(jwt, "Bearer", tokenService.accessTtlSeconds());
     }
 
+    @Operation(
+            summary = "Register",
+            description = "register new user."
+    )
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
     public RegisterResponse register(@RequestBody @Valid RegisterRequest req) {
@@ -44,8 +54,12 @@ public class AuthController {
         return new RegisterResponse(registerResponse.id(), registerResponse.username(),
                 registerResponse.role());
     }
-
-    @PostMapping("/manage")
+    @Operation(
+            summary = "Manage User Roles",
+            description = "manage user roles.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @PatchMapping("/manage")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> manage(@RequestBody @Valid ManageUserRequest req) {
         registrationService.manageUser(req.userId(), req.userRole());
