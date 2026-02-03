@@ -1,4 +1,4 @@
-package com.ahmedyousef.backend_assessment.application.order.exception;
+package com.ahmedyousef.backend_assessment.application.exception;
 
 public class InsufficientStockException extends RuntimeException {
     public InsufficientStockException(String message) {

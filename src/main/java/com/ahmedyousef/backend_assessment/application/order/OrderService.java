@@ -2,8 +2,8 @@ package com.ahmedyousef.backend_assessment.application.order;
 
 import com.ahmedyousef.backend_assessment.api.dto.PlaceOrderRequest;
 import com.ahmedyousef.backend_assessment.api.dto.PlaceOrderResponse;
-import com.ahmedyousef.backend_assessment.application.order.exception.InsufficientStockException;
-import com.ahmedyousef.backend_assessment.application.order.exception.NotFoundException;
+import com.ahmedyousef.backend_assessment.application.exception.InsufficientStockException;
+import com.ahmedyousef.backend_assessment.application.exception.NotFoundException;
 import com.ahmedyousef.backend_assessment.domain.discount.DiscountCalculator;
 import com.ahmedyousef.backend_assessment.domain.discount.DiscountContext;
 import com.ahmedyousef.backend_assessment.domain.discount.allocation.OrderLine;

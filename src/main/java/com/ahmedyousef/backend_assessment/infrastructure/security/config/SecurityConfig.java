@@ -1,5 +1,7 @@
 package com.ahmedyousef.backend_assessment.infrastructure.security.config;
 
+import com.ahmedyousef.backend_assessment.infrastructure.security.error.RestAccessDeniedHandler;
+import com.ahmedyousef.backend_assessment.infrastructure.security.error.RestAuthenticationEntryPoint;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -37,7 +39,9 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http, JwtDecoder jwtDecoder,
-                                            JwtAuthenticationConverter jwtAuthConverter) throws Exception {
+                                            JwtAuthenticationConverter jwtAuthConverter,
+                                            RestAuthenticationEntryPoint authEntryPoint,
+                                            RestAccessDeniedHandler accessDeniedHandler) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
@@ -53,6 +57,10 @@ public class SecurityConfig {
                         .jwt(jwt -> {
                             jwt.decoder(jwtDecoder).jwtAuthenticationConverter(jwtAuthConverter);
                         })
+                )
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint(authEntryPoint)
+                        .accessDeniedHandler(accessDeniedHandler)
                 );
         return http.build();
     }
