@@ -3,6 +3,7 @@ package com.ahmedyousef.backend_assessment.application.product;
 import com.ahmedyousef.backend_assessment.api.dto.CachedPage;
 import com.ahmedyousef.backend_assessment.api.dto.ProductRequest;
 import com.ahmedyousef.backend_assessment.api.dto.ProductResponse;
+import com.ahmedyousef.backend_assessment.application.exception.NotFoundException;
 import com.ahmedyousef.backend_assessment.domain.entity.Product;
 import com.ahmedyousef.backend_assessment.domain.repository.ProductRepository;
 import org.junit.jupiter.api.Test;
@@ -110,8 +111,8 @@ class ProductServiceImplTest {
 
         var req = new ProductRequest("X", null, new BigDecimal("1.00"), 0);
 
-        IllegalArgumentException ex = assertThrows(
-                IllegalArgumentException.class,
+        NotFoundException ex = assertThrows(
+                NotFoundException.class,
                 () -> productService.update(99L, req)
         );
 
