@@ -34,7 +34,7 @@ Develop a Spring Boot application to manage products, users, and orders, includi
 ---
 
 ## Tech Stack
-- Java 21
+- Java 17
 - Spring Boot 3.x
 - Spring Web, Spring Security (JWT), Spring Data JPA + Specifications, Validation
 - PostgreSQL 16 + Flyway
